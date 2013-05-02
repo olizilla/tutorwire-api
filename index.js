@@ -4,23 +4,34 @@ var express = require('express');
 
 var app = express();
 
-var tutor = require('./lib/tutor-rest');
+var tutorApi = require('./lib/tutor');
 
-app.put('/tutor', tutor.putOne);
-app.get('/tutor/:id', tutor.getOne);
-app.get('/tutor', tutor.getAll);
-// app.del('/tutor/:id', tutor.del);
+app.get('/tutor/:id', getTutorById);
+app.get('/tutor', getAllTutors);
+app.put('/tutor', addTutor);
+app.post('/tutor', addTutor);
 
-// app.put('/subject/:name', subject.put);
-// app.get('/subject/:name', subject.getOne);
-// app.get('/subject/', subject.getAll);
-// app.del('/subject/:name', subject.del);
-
-function index(req, res, next) {
-	res.send('hello ' + req.params);
+function getTutorById(req, res){
+	var id = req.params.id;
+	
+	tutorApi.getOne(id, function(err, tutor){
+		res.json(tutor);
+	});
 }
-app.get('/', index);
+
+function getAllTutors(req, res){
+	tutorApi.getAll(function(err, tutors){
+		res.json(tutors);
+	});
+}
+
+function addTutor(req, res){
+	var rawTutor = req.body;
+	tutorApi.add(rawTutor, function(err, tutor){
+		res.json(tutor);
+	});
+}
 
 app.listen(config.app.port, function() {
-	console.log('%s listening at %s', config.app.port, app.url);
+	console.log('listening at %s', config.app.port);
 });
