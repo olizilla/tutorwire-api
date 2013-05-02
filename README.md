@@ -8,7 +8,7 @@ Getting Started
 
 Requries:
 - NodeJS
-- CouchDB
+- Mongo
 
 Uses:
 - [Cradle] for Couch access

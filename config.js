@@ -5,6 +5,11 @@ module.exports = {
 	},
 	db: {
 		name: 'tutorwire',
-		host: '127.0.0.1'
+		host: '127.0.0.1',
+		port: 27017,
+		opts: {
+			auto_reconnect: true,
+			poolSize: 8
+		}
 	}
 };

@@ -13,6 +13,7 @@ app.get('/tutor', getAllTutors);
 app.post('/tutor', addTutor);
 app.put('/tutor/:id', updateTutor);
 app.get('/tutor/for/:subject', getTutorBySubject);
+app.get('/tutor/near/:lng,:lat', getTutorNear);
 
 function getTutorById(req, res){
 	var id = req.params.id;
@@ -70,6 +71,18 @@ function getTutorBySubject(req, res) {
 		
 		res.json(results);
 	})
+}
+
+function getTutorNear(req, res) {
+	var coords = {lat: req.params.lat, lng: req.params.lng};
+
+	tutorApi.getNear(coords, function(err, tutors) {
+		if(errorsHappened(err, req, res, 'Failed to get tutors near ' + coords.lat + ',' + coords.lng)) {
+			return;
+		}
+
+		res.json(tutors);
+	});
 }
 
 app.listen(config.app.port, function() {
