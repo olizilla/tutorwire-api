@@ -10,7 +10,7 @@
   "author": "olizilla",
   "license": "BSD",
   "dependencies": {
-    "restify": "~2.4.1",
-    "cradle": "~0.6.5"
+    "cradle": "~0.6.5",
+    "express": "~3.2.1"
   }
 }

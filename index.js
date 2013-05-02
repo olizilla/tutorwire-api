@@ -1,11 +1,8 @@
 var meta = require('./package.json');
 var config = require('./config.js');
-var restify = require('restify');
+var express = require('express');
 
-var app = restify.createServer({
-	name: meta.title,
-	version: meta.version
-});
+var app = express();
 
 var tutor = require('./lib/tutor-rest');
 
@@ -25,5 +22,5 @@ function index(req, res, next) {
 app.get('/', index);
 
 app.listen(config.app.port, function() {
-	console.log('%s listening at %s', app.name, app.url);
+	console.log('%s listening at %s', config.app.port, app.url);
 });
