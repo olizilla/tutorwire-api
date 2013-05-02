@@ -23,9 +23,9 @@ Update config.js and then run index.js:
 Test it out with CURL or similar:
 
 ```shell
-	curl -is http://localhost:9000/tutor/ -X PUT -d { "name": "Charlie" }
+	curl -i http://localhost:9000/tutor/ -X PUT -d { "name": "Charlie" } -H "Content-type: application/json"
 
-	curl -is http://localhost:9000/tutor/:id -X GET
+	curl -i http://localhost:9000/tutor/:id -X GET
 ```
 
 
