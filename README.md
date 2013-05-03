@@ -8,26 +8,29 @@ Getting Started
 
 Requries:
 - NodeJS
-- Mongo
+- MongoDB
 
 Uses:
-- [Cradle] for Couch access
-- [Restify] for the http plumbing
+- [ExpressJS] for the http plumbing
 
 Update config.js and then run index.js:
 
 ```shell
-	node index.js
+	node index
 ```
 
 Test it out with CURL or similar:
 
 ```shell
-	curl -i http://localhost:9000/tutor/ -X PUT -d { "name": "Charlie" } -H "Content-type: application/json"
-
+	# Create
+	curl -i http://localhost:9000/tutor/ -X POST -d '{ "name": "Charlie" }' -H "Content-type: application/json"
+	
+	# Retrieve
 	curl -i http://localhost:9000/tutor/:id -X GET
+	
+	# Update
+	curl -i http://localhost:9000/tutor/:id -X PUT -d '{ "name": "Chaaarlie" }' -H "Content-type: application/json"
 ```
 
 
-[Cradle]: https://github.com/cloudhead/cradle
-[Restify]: https://github.com/mcavage/node-restify
+[ExpressJS]: http://expressjs.com/
