@@ -13,10 +13,22 @@ Requries:
 Uses:
 - [ExpressJS] for the http plumbing
 
-Update config.js and then run index.js:
+### Configuration
+
+Tutorwire API is configured according to JSON files in the [config] dir. Configuration is based on the NODE_ENV environment variable. Default configuration options can be found in [config/defaults.json]. See [node-config module docs](http://lorenwest.github.io/node-config/latest/) for more information.
+
+### Running
+
+To start the API using the default configuration run:
 
 ```shell
 node index
+```
+
+To use a specific configuration, for example `production.json` run:
+
+```shell
+NODE_ENV=production node index
 ```
 
 Test it out with CURL or similar:
@@ -33,6 +45,17 @@ curl -i http://localhost:9000/tutor/:id -X GET
 # Update
 curl -i http://localhost:9000/tutor/:id -X PUT -d '{ "name": "Chaaarlie" }' -H "Content-type: application/json"
 ```
+
+Unit Testing
+------------
+
+Tests are performed using nodeunit. To run the tests:
+
+```shell
+npm test
+```
+
+This command sets the NODE_ENV variable to "test" and then uses the nodeunit test runner to run the tests.
 
 
 [ExpressJS]: http://expressjs.com/
