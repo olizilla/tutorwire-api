@@ -15,7 +15,7 @@ Uses:
 
 ### Configuration
 
-Tutorwire API is configured according to JSON files in the [config] dir. Configuration is based on the NODE_ENV environment variable. Default configuration options can be found in [config/defaults.json]. See [node-config module docs](http://lorenwest.github.io/node-config/latest/) for more information.
+Tutorwire API is configured according to JSON files in the [config](https://github.com/olizilla/tutorwire-api/tree/master/config) dir. Configuration is based on the NODE_ENV environment variable. Default configuration options can be found in [config/default.json](https://github.com/olizilla/tutorwire-api/blob/master/config/default.json). See [node-config module docs](http://lorenwest.github.io/node-config/latest/) for more information.
 
 ### Running
 
