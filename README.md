@@ -1,4 +1,4 @@
-Tutor Wire API
+Tutor Wire API [![Dependency Status](https://david-dm.org/olizilla/tutorwire-api.png)](https://david-dm.org/olizilla/tutorwire-api)
 ==============
 
 **A work in progress on how best to node all the things**
