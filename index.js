@@ -1,5 +1,5 @@
 var meta = require('./package.json');
-var config = require('./config.js');
+var config = require('config');
 var express = require('express');
 var tutorApi = require('./lib/tutor');
 var util = require('util');
