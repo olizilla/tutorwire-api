@@ -72,6 +72,77 @@ module.exports = {
 		});
 	},
 	
+	'Test add returns created tutor': function(test) {
+		
+		var data = {
+			"name": "David",
+			"subjects": ["Music", "Drama", "Maths"],
+			"location": {
+				"name": "Peckham",
+				"coords": {"lat": 51.473938, "lng": -0.06875}
+			}
+		};
+		
+		test.expect(9);
+		
+		tutorApi.add(data, function(err, tutor) {
+			test.ifError(err);
+			
+			// API should not expose internal IDs
+			test.ifError(tutor._id);
+			
+			test.equal(tutor.name, data.name);
+			test.equal(tutor.location.name, data.location.name);
+			
+			data.subjects.forEach(function(subject) {
+				test.ok(tutor.subjects.indexOf(subject) != -1);
+			});
+			
+			test.equal(tutor.location.coords.lat, data.location.coords.lat);
+			test.equal(tutor.location.coords.lng, data.location.coords.lng);
+			
+			test.done();
+		});
+	},
+	
+	'Test update returns updated tutor': function(test) {
+		
+		var data = {
+			"name": "David",
+			"subjects": ["Music", "Drama", "Maths"],
+			"location": {
+				"name": "Peckham",
+				"coords": {"lat": 51.473938, "lng": -0.06875}
+			}
+		};
+		
+		test.expect(10);
+		
+		tutorApi.add(data, function(err, tutor) {
+			
+			test.ifError(err);
+			
+			tutorApi.update(tutor.puid, {name: 'Dave'}, function(err, tutor) {
+				test.ifError(err);
+				
+				// API should not expose internal IDs
+				test.ifError(tutor._id);
+				
+				test.equal(tutor.name, 'Dave');
+				test.equal(tutor.location.name, data.location.name);
+				
+				data.subjects.forEach(function(subject) {
+					test.ok(tutor.subjects.indexOf(subject) != -1);
+				});
+				
+				test.equal(tutor.location.coords.lat, data.location.coords.lat);
+				test.equal(tutor.location.coords.lng, data.location.coords.lng);
+				
+				test.done();
+			});
+		});
+	},
+	
 	'Test getNear returns results in expected order': function(test) {
 		
 		// Insert some data
