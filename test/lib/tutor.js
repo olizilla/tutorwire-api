@@ -1,17 +1,18 @@
 var db = require('../../lib/db');
 var tutorApi = require('../../lib/tutor');
 var async = require('async');
+var assert = require('assert');
 
-module.exports = {
+describe('Tutor', function() {
 	
-	setUp: function(cb) {
+	beforeEach(function(done) {
 		
 		function onDbOpen(err) {
 			if(err) return console.error('Failed to open database', err);
 			
 			db.collection('tutors', function(err, tutors) {
 				// Ensure the tutors collection is empty
-				tutors.remove({}, cb);
+				tutors.remove({}, done);
 			});
 		}
 		
@@ -25,239 +26,244 @@ module.exports = {
 		} else {
 			db.open(onDbOpen);
 		}
-	},
+	});
 	
-	tearDown: function(cb) {
+	afterEach(function(done) {
 		
 		// clean up
 		db.close(function(err) {
 			if(err) return console.error('Failed to open database', err);
-			cb();
+			done();
 		});
-	},
+	});
 	
-	'Test getOne validates PUID correctly': function(test) {
+	describe('#getOne', function() {
 		
-		// Data that should cause getOne to return an error
-		var testData = [null, '', undefined, false, [], 0];
-		
-		// Array of tasks that submit the test data to getOne
-		var tasks = testData.map(function(input) {
-			return function(cb) {
-				tutorApi.getOne(input, function(err, tutor) {
-					cb(null, {err: err, tutor: tutor});
+		it('should validate PUID correctly', function(done) {
+			
+			// Data that should cause getOne to return an error
+			var testData = [null, '', undefined, false, [], 0];
+			
+			// Array of tasks that submit the test data to getOne
+			var tasks = testData.map(function(input) {
+				return function(cb) {
+					tutorApi.getOne(input, function(err, tutor) {
+						cb(null, {err: err, tutor: tutor});
+					});
+				};
+			});
+			
+			// Perform the tasks and inspect the results
+			async.parallel(tasks, function(err, results) {
+				
+				// Performing the tasks should not have caused an error
+				assert.ifError(err);
+				
+				// All results should be Errors
+				results.forEach(function(result) {
+					
+					// Ensure no tutor was returned
+					assert.equal(result.tutor, undefined);
+					
+					// Ensure an error was returned
+					assert.ok(result.err);
 				});
+				
+				done();
+			});
+		});
+	});
+	
+	describe('#add', function() {
+		
+		it('should return created tutor', function(done) {
+			
+			var data = {
+				"name": "David",
+				"subjects": ["Music", "Drama", "Maths"],
+				"location": {
+					"name": "Peckham",
+					"coords": {"lat": 51.473938, "lng": -0.06875}
+				}
 			};
-		});
-		
-		test.expect((testData.length * 2) + 1);
-		
-		// Perform the tasks and inspect the results
-		async.parallel(tasks, function(err, results) {
 			
-			// Performing the tasks should not have caused an error
-			test.ifError(err);
-			
-			// All results should be Errors
-			results.forEach(function(result) {
-				
-				// Ensure no tutor was returned
-				test.equal(result.tutor, undefined);
-				
-				// Ensure an error was returned
-				test.ok(result.err);
-			});
-			
-			test.done();
-		});
-	},
-	
-	'Test add returns created tutor': function(test) {
-		
-		var data = {
-			"name": "David",
-			"subjects": ["Music", "Drama", "Maths"],
-			"location": {
-				"name": "Peckham",
-				"coords": {"lat": 51.473938, "lng": -0.06875}
-			}
-		};
-		
-		test.expect(9);
-		
-		tutorApi.add(data, function(err, tutor) {
-			test.ifError(err);
-			
-			// API should not expose internal IDs
-			test.ifError(tutor._id);
-			
-			test.equal(tutor.name, data.name);
-			test.equal(tutor.location.name, data.location.name);
-			
-			data.subjects.forEach(function(subject) {
-				test.ok(tutor.subjects.indexOf(subject) != -1);
-			});
-			
-			test.equal(tutor.location.coords.lat, data.location.coords.lat);
-			test.equal(tutor.location.coords.lng, data.location.coords.lng);
-			
-			test.done();
-		});
-	},
-	
-	'Test update returns updated tutor': function(test) {
-		
-		var data = {
-			"name": "David",
-			"subjects": ["Music", "Drama", "Maths"],
-			"location": {
-				"name": "Peckham",
-				"coords": {"lat": 51.473938, "lng": -0.06875}
-			}
-		};
-		
-		test.expect(10);
-		
-		tutorApi.add(data, function(err, tutor) {
-			
-			test.ifError(err);
-			
-			tutorApi.update(tutor.puid, {name: 'Dave'}, function(err, tutor) {
-				test.ifError(err);
+			tutorApi.add(data, function(err, tutor) {
+				assert.ifError(err);
 				
 				// API should not expose internal IDs
-				test.ifError(tutor._id);
+				assert.ifError(tutor._id);
 				
-				test.equal(tutor.name, 'Dave');
-				test.equal(tutor.location.name, data.location.name);
+				assert.equal(tutor.name, data.name);
+				assert.equal(tutor.location.name, data.location.name);
 				
 				data.subjects.forEach(function(subject) {
-					test.ok(tutor.subjects.indexOf(subject) != -1);
+					assert.ok(tutor.subjects.indexOf(subject) != -1);
 				});
 				
-				test.equal(tutor.location.coords.lat, data.location.coords.lat);
-				test.equal(tutor.location.coords.lng, data.location.coords.lng);
+				assert.equal(tutor.location.coords.lat, data.location.coords.lat);
+				assert.equal(tutor.location.coords.lng, data.location.coords.lng);
 				
-				test.done();
+				done();
 			});
 		});
-	},
+	});
 	
-	'Test getNear returns results in expected order': function(test) {
+	describe('#update', function() {
 		
-		// Insert some data
-		var data = [{
+		it('should return updated tutor', function(done) {
+			
+			var data = {
 				"name": "David",
 				"subjects": ["Music", "Drama", "Maths"],
 				"location": {
 					"name": "Peckham",
 					"coords": {"lat": 51.473938, "lng": -0.06875}
 				}
-			}, {
-				"name": "Charlie",
-				"subjects": ["Maths", "Physics"],
-				"location": {
-					"name": "Croydon",
-					"coords": {"lat": 51.374667, "lng": -0.097504}
-				}
-			}, {
-				"name": "Inigo",
-				"subjects": ["Sword Fighting"],
-				"location": {
-					"name": "Hoxton",
-					"coords": {"lat": 51.530739, "lng": -0.076861}
-				}
-			}
-		];
-		
-		var tasks = data.map(function(d) {
-			return function(cb) {
-				tutorApi.add(d, cb);
 			};
-		});
-		
-		test.expect(6);
-		
-		// Once the data is inserted, the testing can begin!
-		async.parallel(tasks, function(err) {
 			
-			test.ifError(err);
-			
-			// Portsmouth
-			var coord = {lat: 50.790195, lng: -1.07769};
-			
-			// Method under test
-			tutorApi.getNear(coord, function(err, results) {
+			tutorApi.add(data, function(err, tutor) {
 				
-				test.ifError(err);
+				assert.ifError(err);
 				
-				test.equal(results.length, 3);
-				
-				// Results should be in the order Charlie, David, Inigo
-				test.equal(results[0].name, 'Charlie');
-				test.equal(results[1].name, 'David');
-				test.equal(results[2].name, 'Inigo');
-				
-				test.done();
+				tutorApi.update(tutor.puid, {name: 'Dave'}, function(err, tutor) {
+					assert.ifError(err);
+					
+					// API should not expose internal IDs
+					assert.ifError(tutor._id);
+					
+					assert.equal(tutor.name, 'Dave');
+					assert.equal(tutor.location.name, data.location.name);
+					
+					data.subjects.forEach(function(subject) {
+						assert.ok(tutor.subjects.indexOf(subject) != -1);
+					});
+					
+					assert.equal(tutor.location.coords.lat, data.location.coords.lat);
+					assert.equal(tutor.location.coords.lng, data.location.coords.lng);
+					
+					done();
+				});
 			});
 		});
-	},
+	});
 	
-	'Test getSubjects returns distinct subject names': function(test) {
+	describe('#getNear', function() {
 		
-		// Insert some data
-		var data = [{
-				"name": "David",
-				"subjects": ["Music", "Drama", "Maths"],
-				"location": {
-					"name": "Peckham",
-					"coords": {"lat": 51.473938, "lng": -0.06875}
-				}
-			}, {
-				"name": "Charlie",
-				"subjects": ["Maths", "Physics"],
-				"location": {
-					"name": "Croydon",
-					"coords": {"lat": 51.374667, "lng": -0.097504}
-				}
-			}, {
-				"name": "Inigo",
-				"subjects": ["Sword Fighting"],
-				"location": {
-					"name": "Hoxton",
-					"coords": {"lat": 51.530739, "lng": -0.076861}
-				}
-			}
-		];
-		
-		var tasks = data.map(function(d) {
-			return function(cb) {
-				tutorApi.add(d, cb);
-			};
-		});
-		
-		test.expect(8);
-		
-		// Once the data is inserted, the testing can begin!
-		async.parallel(tasks, function(err) {
+		it('should return results in expected order', function(done) {
 			
-			test.ifError(err);
+			// Insert some data
+			var data = [{
+					"name": "David",
+					"subjects": ["Music", "Drama", "Maths"],
+					"location": {
+						"name": "Peckham",
+						"coords": {"lat": 51.473938, "lng": -0.06875}
+					}
+				}, {
+					"name": "Charlie",
+					"subjects": ["Maths", "Physics"],
+					"location": {
+						"name": "Croydon",
+						"coords": {"lat": 51.374667, "lng": -0.097504}
+					}
+				}, {
+					"name": "Inigo",
+					"subjects": ["Sword Fighting"],
+					"location": {
+						"name": "Hoxton",
+						"coords": {"lat": 51.530739, "lng": -0.076861}
+					}
+				}
+			];
 			
-			// Method under test
-			tutorApi.getSubjects(function(err, subjects) {
+			var tasks = data.map(function(d) {
+				return function(cb) {
+					tutorApi.add(d, cb);
+				};
+			});
+			
+			// Once the data is inserted, the testing can begin!
+			async.parallel(tasks, function(err) {
 				
-				test.ifError(err);
+				assert.ifError(err);
 				
-				test.equal(subjects.length, 5);
+				// Portsmouth
+				var coord = {lat: 50.790195, lng: -1.07769};
 				
-				test.ok(subjects.indexOf('Music') > -1);
-				test.ok(subjects.indexOf('Drama') > -1);
-				test.ok(subjects.indexOf('Maths') > -1);
-				test.ok(subjects.indexOf('Physics') > -1);
-				test.ok(subjects.indexOf('Sword Fighting') > -1);
-				
-				test.done();
+				// Method under test
+				tutorApi.getNear(coord, function(err, results) {
+					
+					assert.ifError(err);
+					
+					assert.equal(results.length, 3);
+					
+					// Results should be in the order Charlie, David, Inigo
+					assert.equal(results[0].name, 'Charlie');
+					assert.equal(results[1].name, 'David');
+					assert.equal(results[2].name, 'Inigo');
+					
+					done();
+				});
 			});
 		});
-	}
-};
+	});
+	
+	describe('#getSubjects', function() {
+		
+		it('should return distinct subject names', function(done) {
+			
+			// Insert some data
+			var data = [{
+					"name": "David",
+					"subjects": ["Music", "Drama", "Maths"],
+					"location": {
+						"name": "Peckham",
+						"coords": {"lat": 51.473938, "lng": -0.06875}
+					}
+				}, {
+					"name": "Charlie",
+					"subjects": ["Maths", "Physics"],
+					"location": {
+						"name": "Croydon",
+						"coords": {"lat": 51.374667, "lng": -0.097504}
+					}
+				}, {
+					"name": "Inigo",
+					"subjects": ["Sword Fighting"],
+					"location": {
+						"name": "Hoxton",
+						"coords": {"lat": 51.530739, "lng": -0.076861}
+					}
+				}
+			];
+			
+			var tasks = data.map(function(d) {
+				return function(cb) {
+					tutorApi.add(d, cb);
+				};
+			});
+			
+			// Once the data is inserted, the testing can begin!
+			async.parallel(tasks, function(err) {
+				
+				assert.ifError(err);
+				
+				// Method under test
+				tutorApi.getSubjects(function(err, subjects) {
+					
+					assert.ifError(err);
+					
+					assert.equal(subjects.length, 5);
+					
+					assert.ok(subjects.indexOf('Music') > -1);
+					assert.ok(subjects.indexOf('Drama') > -1);
+					assert.ok(subjects.indexOf('Maths') > -1);
+					assert.ok(subjects.indexOf('Physics') > -1);
+					assert.ok(subjects.indexOf('Sword Fighting') > -1);
+					
+					done();
+				});
+			});
+		});
+	});
+});
