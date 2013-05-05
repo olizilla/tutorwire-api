@@ -201,5 +201,63 @@ module.exports = {
 				test.done();
 			});
 		});
+	},
+	
+	'Test getSubjects returns distinct subject names': function(test) {
+		
+		// Insert some data
+		var data = [{
+				"name": "David",
+				"subjects": ["Music", "Drama", "Maths"],
+				"location": {
+					"name": "Peckham",
+					"coords": {"lat": 51.473938, "lng": -0.06875}
+				}
+			}, {
+				"name": "Charlie",
+				"subjects": ["Maths", "Physics"],
+				"location": {
+					"name": "Croydon",
+					"coords": {"lat": 51.374667, "lng": -0.097504}
+				}
+			}, {
+				"name": "Inigo",
+				"subjects": ["Sword Fighting"],
+				"location": {
+					"name": "Hoxton",
+					"coords": {"lat": 51.530739, "lng": -0.076861}
+				}
+			}
+		];
+		
+		var tasks = data.map(function(d) {
+			return function(cb) {
+				tutorApi.add(d, cb);
+			};
+		});
+		
+		test.expect(8);
+		
+		// Once the data is inserted, the testing can begin!
+		async.parallel(tasks, function(err) {
+			
+			test.ifError(err);
+			
+			// Method under test
+			tutorApi.getSubjects(function(err, subjects) {
+				
+				test.ifError(err);
+				
+				test.equal(subjects.length, 5);
+				
+				test.ok(subjects.indexOf('Music') > -1);
+				test.ok(subjects.indexOf('Drama') > -1);
+				test.ok(subjects.indexOf('Maths') > -1);
+				test.ok(subjects.indexOf('Physics') > -1);
+				test.ok(subjects.indexOf('Sword Fighting') > -1);
+				
+				test.done();
+			});
+		});
 	}
 };

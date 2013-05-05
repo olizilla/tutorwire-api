@@ -14,6 +14,7 @@ app.post('/tutor', addTutor);
 app.put('/tutor/:id', updateTutor);
 app.get('/tutor/for/:subject', getTutorBySubject);
 app.get('/tutor/near/:lng,:lat', getTutorNear);
+app.get('/tutor/subjects', getTutorSubjects);
 
 function getTutorById(req, res){
 	var id = req.params.id;
@@ -82,6 +83,17 @@ function getTutorNear(req, res) {
 		}
 
 		res.json(tutors);
+	});
+}
+
+function getTutorSubjects(req, res) {
+	
+	tutorApi.getSubjects(function(err, subjects) {
+		if(errorsHappened(err, req, res, 'Failed to get tutor subjects')) {
+			return;
+		}
+		
+		res.json(subjects);
 	});
 }
 
