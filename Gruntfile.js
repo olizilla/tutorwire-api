@@ -14,6 +14,13 @@ module.exports = function(grunt) {
 					reporter: 'spec'
 				}
 			},
+			coveralls: {
+				options: {
+					coveralls: {
+						serviceName: 'travis-ci'
+					}
+				}
+			},
 			options: {
 			  files: 'test/**/*.js'
 			}
@@ -30,4 +37,5 @@ module.exports = function(grunt) {
 	
 	grunt.registerTask('default', ['test']);
 	grunt.registerTask('test', ['jshint', 'env:test', 'mochacov:test']);
+	grunt.registerTask('travis', ['jshint', 'env:test', 'mochacov:coveralls']);
 };
