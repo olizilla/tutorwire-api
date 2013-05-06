@@ -1,4 +1,4 @@
-Tutor Wire API [![Build Status](https://travis-ci.org/olizilla/tutorwire-api.png?branch=master)](https://travis-ci.org/olizilla/tutorwire-api) [![Dependency Status](https://david-dm.org/olizilla/tutorwire-api.png)](https://david-dm.org/olizilla/tutorwire-api)
+Tutor Wire API [![Build Status](https://travis-ci.org/olizilla/tutorwire-api.png?branch=master)](https://travis-ci.org/olizilla/tutorwire-api) [![Dependency Status](https://david-dm.org/olizilla/tutorwire-api.png)](https://david-dm.org/olizilla/tutorwire-api) [![Coverage Status](https://coveralls.io/repos/olizilla/tutorwire-api/badge.png?branch=master)](https://coveralls.io/r/olizilla/tutorwire-api)
 ==============
 
 **A work in progress on how best to node all the things**
