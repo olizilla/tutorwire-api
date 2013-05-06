@@ -12,6 +12,7 @@ Requries:
 
 Uses:
 - [ExpressJS] for the http plumbing
+- [Grunt](http://gruntjs.com) to lint, run tests and produce coverage reports
 
 ### Configuration
 
@@ -55,7 +56,17 @@ Tests are performed using [Mocha](http://visionmedia.github.io/mocha/). To run t
 npm test
 ```
 
-This command sets the NODE_ENV variable to "test" and then uses the nodeunit test runner to run the tests.
+Continuous Integration
+----------------------
+
+[Travis CI](https://travis-ci.org/olizilla/tutorwire-api) runs the `travis` task when new code is pushed to the repo. The task lints the JavaScript, runs the tests, creates and submits the [coverage report](#coverage).
+
+Coverage
+--------
+
+Coverage is tracked by [coveralls.io](https://coveralls.io/r/olizilla/tutorwire-api). Coverage reports are created by the [grunt-mocha-cov](https://github.com/mmoulton/grunt-mocha-cov) plugin. The task `mochacov:coveralls` creates and submits the coverage report to [coveralls.io](https://coveralls.io/). It will only submit the report successfully when run by Travis.
+
+Noteworthy configuration is the `scripts.blanket.pattern` config in the `package.json` file. Before coverage reports can be generated, blanket needs to process the source code to create "instrumented" versions that allow coverage data to be captured. The instrumented code is what is run by the test framework. The `scripts.blanket.pattern` config essentially specifies what files should be considered for coverage.
 
 
 [ExpressJS]: http://expressjs.com/
