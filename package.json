@@ -4,7 +4,13 @@
   "description": "Tutorwire API",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "blanket": {
+      "pattern": [
+        "index.js",
+        "lib"
+      ]
+    }
   },
   "repository": "git@github.com:olizilla/tutorwire-api.git",
   "author": "olizilla",
