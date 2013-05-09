@@ -80,6 +80,7 @@ describe('Tutor', function() {
 			
 			var data = {
 				"name": "David",
+				"email": "david@example.org",
 				"subjects": ["Music", "Drama", "Maths"],
 				"location": {
 					"name": "Peckham",
@@ -114,6 +115,7 @@ describe('Tutor', function() {
 			
 			var data = {
 				"name": "David",
+				"email": "david@example.org",
 				"subjects": ["Music", "Drama", "Maths"],
 				"location": {
 					"name": "Peckham",
@@ -154,6 +156,7 @@ describe('Tutor', function() {
 			// Insert some data
 			var data = [{
 					"name": "David",
+					"email": "david@example.org",
 					"subjects": ["Music", "Drama", "Maths"],
 					"location": {
 						"name": "Peckham",
@@ -161,6 +164,7 @@ describe('Tutor', function() {
 					}
 				}, {
 					"name": "Charlie",
+					"email": "charlie@example.org",
 					"subjects": ["Maths", "Physics"],
 					"location": {
 						"name": "Croydon",
@@ -168,6 +172,7 @@ describe('Tutor', function() {
 					}
 				}, {
 					"name": "Inigo",
+					"email": "inigo@example.org",
 					"subjects": ["Sword Fighting"],
 					"location": {
 						"name": "Hoxton",
@@ -215,6 +220,7 @@ describe('Tutor', function() {
 			// Insert some data
 			var data = [{
 					"name": "David",
+					"email": "david@example.org",
 					"subjects": ["Music", "Drama", "Maths"],
 					"location": {
 						"name": "Peckham",
@@ -222,6 +228,7 @@ describe('Tutor', function() {
 					}
 				}, {
 					"name": "Charlie",
+					"email": "charlie@example.org",
 					"subjects": ["Maths", "Physics"],
 					"location": {
 						"name": "Croydon",
@@ -229,6 +236,7 @@ describe('Tutor', function() {
 					}
 				}, {
 					"name": "Inigo",
+					"email": "inigo@example.org",
 					"subjects": ["Sword Fighting"],
 					"location": {
 						"name": "Hoxton",
