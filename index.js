@@ -6,6 +6,26 @@ var util = require('util');
 
 var app = express();
 
+app.use(express.methodOverride());
+
+// https://gist.github.com/cuppster/2344435
+// ## CORS middleware
+// 
+// see: http://stackoverflow.com/questions/7067966/how-to-allow-cors-in-express-nodejs
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+      res.send(204); // olizilla: Edited to 204, as we're not going to send any content
+    }
+    else {
+      next();
+    }
+};
+app.use(allowCrossDomain);
 app.use(express.bodyParser());
 
 app.get('/tutor/:id', getTutorById);
@@ -15,6 +35,7 @@ app.put('/tutor/:id', updateTutor);
 app.get('/tutor/for/:subject', getTutorBySubject);
 app.get('/tutor/near/:lng,:lat', getTutorNear);
 app.get('/tutor/subjects', getTutorSubjects);
+
 
 function getTutorById(req, res){
 	var id = req.params.id;
@@ -71,7 +92,7 @@ function getTutorBySubject(req, res) {
 		}
 		
 		res.json(results);
-	})
+	});
 }
 
 function getTutorNear(req, res) {
