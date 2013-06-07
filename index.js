@@ -34,8 +34,7 @@ app.post('/tutor', addTutor);
 app.put('/tutor/:id', updateTutor);
 app.get('/tutor/for/:subject', getTutorBySubject);
 app.get('/tutor/near/:lng,:lat', getTutorNear);
-app.get('/tutor/subjects', getTutorSubjects);
-
+app.get('/tutor/subjects', getSubjects);
 
 function getTutorById(req, res){
 	var id = req.params.id;
@@ -107,7 +106,7 @@ function getTutorNear(req, res) {
 	});
 }
 
-function getTutorSubjects(req, res) {
+function getSubjects(req, res) {
 	
 	tutorApi.getSubjects(function(err, subjects) {
 		if(errorsHappened(err, req, res, 'Failed to get tutor subjects')) {
@@ -117,12 +116,6 @@ function getTutorSubjects(req, res) {
 		res.json(subjects);
 	});
 }
-
-app.listen(config.app.port, function() {
-	console.log('listening at %s', config.app.port);
-});
-
-
 
 function errorsHappened(err, req, res, msg) {
 
@@ -137,4 +130,8 @@ function errorsHappened(err, req, res, msg) {
 	res.json(500, {err: msg});
 
 	return true;
-};
+}
+
+app.listen(config.app.port, function() {
+	console.log('listening at %s', config.app.port);
+});

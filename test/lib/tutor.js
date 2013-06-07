@@ -81,7 +81,7 @@ describe('Tutor', function() {
 			var data = {
 				"name": "David",
 				"email": "david@example.org",
-				"subjects": ["Music", "Drama", "Maths"],
+				"subject": "Music",
 				"location": {
 					"name": "Peckham",
 					"coords": {"lat": 51.473938, "lng": -0.06875}
@@ -89,18 +89,15 @@ describe('Tutor', function() {
 			};
 			
 			tutorApi.add(data, function(err, tutor) {
+
 				assert.ifError(err);
 				
 				// API should not expose internal IDs
 				assert.ifError(tutor._id);
 				
 				assert.equal(tutor.name, data.name);
+				assert.equal(tutor.subject, data.subject);
 				assert.equal(tutor.location.name, data.location.name);
-				
-				data.subjects.forEach(function(subject) {
-					assert.ok(tutor.subjects.indexOf(subject) != -1);
-				});
-				
 				assert.equal(tutor.location.coords.lat, data.location.coords.lat);
 				assert.equal(tutor.location.coords.lng, data.location.coords.lng);
 				
@@ -116,7 +113,7 @@ describe('Tutor', function() {
 			var data = {
 				"name": "David",
 				"email": "david@example.org",
-				"subjects": ["Music", "Drama", "Maths"],
+				"subject": "Music",
 				"location": {
 					"name": "Peckham",
 					"coords": {"lat": 51.473938, "lng": -0.06875}
@@ -134,12 +131,8 @@ describe('Tutor', function() {
 					assert.ifError(tutor._id);
 					
 					assert.equal(tutor.name, 'Dave');
+					assert.equal(tutor.subject, data.subject);
 					assert.equal(tutor.location.name, data.location.name);
-					
-					data.subjects.forEach(function(subject) {
-						assert.ok(tutor.subjects.indexOf(subject) != -1);
-					});
-					
 					assert.equal(tutor.location.coords.lat, data.location.coords.lat);
 					assert.equal(tutor.location.coords.lng, data.location.coords.lng);
 					
@@ -157,7 +150,7 @@ describe('Tutor', function() {
 			var data = [{
 					"name": "David",
 					"email": "david@example.org",
-					"subjects": ["Music", "Drama", "Maths"],
+					"subject": "Music",
 					"location": {
 						"name": "Peckham",
 						"coords": {"lat": 51.473938, "lng": -0.06875}
@@ -165,7 +158,7 @@ describe('Tutor', function() {
 				}, {
 					"name": "Charlie",
 					"email": "charlie@example.org",
-					"subjects": ["Maths", "Physics"],
+					"subject": "Maths",
 					"location": {
 						"name": "Croydon",
 						"coords": {"lat": 51.374667, "lng": -0.097504}
@@ -173,7 +166,7 @@ describe('Tutor', function() {
 				}, {
 					"name": "Inigo",
 					"email": "inigo@example.org",
-					"subjects": ["Sword Fighting"],
+					"subject": "Sword Fighting",
 					"location": {
 						"name": "Hoxton",
 						"coords": {"lat": 51.530739, "lng": -0.076861}
@@ -221,7 +214,7 @@ describe('Tutor', function() {
 			var data = [{
 					"name": "David",
 					"email": "david@example.org",
-					"subjects": ["Music", "Drama", "Maths"],
+					"subject": "Music",
 					"location": {
 						"name": "Peckham",
 						"coords": {"lat": 51.473938, "lng": -0.06875}
@@ -229,7 +222,7 @@ describe('Tutor', function() {
 				}, {
 					"name": "Charlie",
 					"email": "charlie@example.org",
-					"subjects": ["Maths", "Physics"],
+					"subject": "Maths",
 					"location": {
 						"name": "Croydon",
 						"coords": {"lat": 51.374667, "lng": -0.097504}
@@ -237,7 +230,7 @@ describe('Tutor', function() {
 				}, {
 					"name": "Inigo",
 					"email": "inigo@example.org",
-					"subjects": ["Sword Fighting"],
+					"subject": "Sword Fighting",
 					"location": {
 						"name": "Hoxton",
 						"coords": {"lat": 51.530739, "lng": -0.076861}
@@ -257,17 +250,15 @@ describe('Tutor', function() {
 				assert.ifError(err);
 				
 				// Method under test
-				tutorApi.getSubjects(function(err, subjects) {
+				tutorApi.getSubjects(function(err, subject) {
 					
 					assert.ifError(err);
 					
-					assert.equal(subjects.length, 5);
+					assert.equal(subject.length, 3);
 					
-					assert.ok(subjects.indexOf('Music') > -1);
-					assert.ok(subjects.indexOf('Drama') > -1);
-					assert.ok(subjects.indexOf('Maths') > -1);
-					assert.ok(subjects.indexOf('Physics') > -1);
-					assert.ok(subjects.indexOf('Sword Fighting') > -1);
+					assert.ok(subject.indexOf('Music') > -1);
+					assert.ok(subject.indexOf('Maths') > -1);
+					assert.ok(subject.indexOf('Sword Fighting') > -1);
 					
 					done();
 				});
