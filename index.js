@@ -27,13 +27,14 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain);
 app.use(express.bodyParser());
+app.use(express.logger());
 
 app.get('/tutor/:id', getTutorById);
 app.get('/tutor', getAllTutors);
 app.post('/tutor', addTutor);
 app.put('/tutor/:id', updateTutor);
-app.get('/tutor/for/:subject', getTutorBySubject);
-app.get('/tutor/near/:lng,:lat', getTutorNear);
+app.get('/tutors/for/:subject', getTutorBySubject);
+app.get('/tutors/near/:lng,:lat', getTutorNear);
 app.get('/tutor/subjects', getSubjects);
 
 function getTutorById(req, res){
@@ -65,7 +66,7 @@ function addTutor(req, res){
 		if(errorsHappened(err, req, res, 'Failed to add tutor')) {
 			return;
 		}
-		
+
 		res.json(tutor);
 	});
 }
@@ -89,7 +90,7 @@ function getTutorBySubject(req, res) {
 		if(errorsHappened(err, req, res, 'Search failed for ' + subject)) {
 			return;
 		}
-		
+
 		res.json(results);
 	});
 }
@@ -133,5 +134,5 @@ function errorsHappened(err, req, res, msg) {
 }
 
 app.listen(config.app.port, function() {
-	console.log('listening at %s', config.app.port);
+	console.log('tutorwire-api listening on %s', config.app.port);
 });

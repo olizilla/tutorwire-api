@@ -6,35 +6,18 @@ var assert = require('assert');
 describe('Tutor', function() {
 	
 	beforeEach(function(done) {
-		
-		function onDbOpen(err) {
-			if(err) return console.error('Failed to open database', err);
-			
-			db.collection('tutors', function(err, tutors) {
-				// Ensure the tutors collection is empty
-				tutors.remove({}, done);
-			});
-		}
-		
-		// If the DB is connected then perform setup straight away...
-		if(db.serverConfig.isConnected()) {
-			onDbOpen();
-		// If the DB is connecting then perform the setup when open
-		} else if(db._state == 'connecting') {
-			db.once('open', onDbOpen);
-		// If the DB is not open or opening then open and perform setup
-		} else {
-			db.open(onDbOpen);
-		}
+
+		db.tutors(function(err, tutors) {
+				
+			// Ensure the tutors collection is empty
+			tutors.remove({}, done);
+		});
 	});
 	
 	afterEach(function(done) {
-		
-		// clean up
-		db.close(function(err) {
-			if(err) return console.error('Failed to open database', err);
-			done();
-		});
+
+		done();		
+		// TODO: should we close the db connection at this point?
 	});
 	
 	describe('#getOne', function() {

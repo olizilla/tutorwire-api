@@ -1,5 +1,5 @@
 {
 	"db": {
-		"name": "tutorwire-test"
+		"url": "mongodb://localhost:27017/tutorwire-test"
 	}
 }

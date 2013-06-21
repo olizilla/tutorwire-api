@@ -22,12 +22,15 @@ module.exports = function(grunt) {
 				}
 			},
 			options: {
-			  files: 'test/**/*.js'
+				files: 'test/**/*.js'
 			}
 		},
 		
 		jshint: {
-			files: 'lib/**/*.js'
+			files: 'lib/**/*.js',
+			options: {
+				smarttabs: true
+			}
 		}
 	});
 	

@@ -3,9 +3,7 @@
 		"port": 9000
 	},
 	"db": {
-		"name": "tutorwire",
-		"host": "127.0.0.1",
-		"port": 27017,
+		"url": "mongodb://localhost:27017/tutorwire",
 		"opts": {
 			"server": {
 				"auto_reconnect": true,
