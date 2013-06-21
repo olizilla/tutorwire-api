@@ -1,8 +1,0 @@
-{
-	"app": {
-		"port": 9000
-	},
-	"db": {
-		"url": "mongodb://nodejitsu:23f23a8c5b1eeb0e1f152cb9c031b345@dharma.mongohq.com:10025/nodejitsudb3858934696",
-	}
-}
