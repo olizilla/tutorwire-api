@@ -32,6 +32,12 @@ To use a specific configuration, for example `production.json` run:
 NODE_ENV=production node index
 ```
 
+Use the [forever](https://npmjs.org/package/forever) module to start the process as a daemon: 
+
+```sh
+NODE_ENV=xxx forever start index.js
+```
+
 Test it out with CURL or similar:
 
 ```shell
