@@ -134,6 +134,6 @@ function errorsHappened(err, req, res, msg) {
 }
 
 app.listen(config.app.port, function() {
-	process.title = 'tutorwire-api:' + config.app.port;
+	process.title = 'tutorwire:' + config.app.port;
 	console.log('tutorwire-api listening on %s', config.app.port);
 });
