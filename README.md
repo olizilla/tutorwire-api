@@ -56,7 +56,7 @@ curl -i http://localhost:9000/tutor/:id -X PUT -d '{ "name": "Chaaarlie" }' -H "
 Unit Testing
 ------------
 
-Tests are performed using [Mocha](http://visionmedia.github.io/mocha/). To run the tests:
+Tests are performed using [Mocha](http://mochajs.org/). To run the tests:
 
 ```shell
 npm test
